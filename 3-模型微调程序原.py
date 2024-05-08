@@ -9,9 +9,10 @@ def current_time():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 # 设置序列最大长度和数据类型
-max_seq_length = 2048
-dtype = None
-load_in_4bit = True
+max_seq_length = 2048  # 选择任意长度！我们内部自动支持RoPE缩放！
+
+dtype = None   # 自动检测数据类型。Tesla T4, V100用Float16，Ampere+用Bfloat16
+load_in_4bit = True # 启用4bit量化以减少内存使用。可以设置为False
 
 # 定义支持4位量化的模型列表
 fourbit_models = [
@@ -22,8 +23,22 @@ fourbit_models = [
 
 # 加载模型和分词器
 print(f"{current_time()} - 正在加载模型和分词器...")
+
+
+model_directory = "./2-1-待训练模型"  # 模型和分词器保存的目录
+model_path = f"{model_directory}/model.safetensors"
+model = torch.load(model_path)
+
+
+# 如果分词器也以某种方式保存，则需要相应地加载它
+# 示例：tokenizer_path = f"{model_directory}/tokenizer.json"  # 假设分词器保存为json格式
+# tokenizer = Tokenizer.from_file(tokenizer_path)
+
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name="unsloth/llama-3-8b-bnb-4bit",
+    #model_name="unsloth/llama-3-8b-bnb-4bit", by yzm 20240508 原
+
+    model = torch.load(model_path)
+
     max_seq_length=max_seq_length,
     dtype=dtype,
     load_in_4bit=load_in_4bit,
