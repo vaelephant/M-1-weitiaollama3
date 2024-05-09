@@ -149,7 +149,7 @@ print("\n\n\n")
 print(f"{current_time()} - 开始训练...")
 
 # 训练前保存指标
-pre_train_metrics = save_metrics(model)
+#pre_train_metrics = save_metrics(model)
 
 # 开始训练
 trainer_stats = trainer.train()
