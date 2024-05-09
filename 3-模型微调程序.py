@@ -154,7 +154,6 @@ print(f"{current_time()} - 开始训练...")
 # 开始训练
 trainer_stats = trainer.train()
 
-
 # # 第七步： 训练后保存指标
 
 # post_train_metrics = save_metrics(model)
@@ -183,6 +182,8 @@ end_time = datetime.datetime.now()
 duration = end_time - start_time
 print(f"{current_time()} - 训练完成。")
 print("\n")
+print(f"训练开始时间: {start_time}")
+print(f"训练结束时间: {end_time}")
 print(f"训练用时: {duration}")
 
 
