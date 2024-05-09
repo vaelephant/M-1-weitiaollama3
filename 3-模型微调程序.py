@@ -145,6 +145,7 @@ trainer = SFTTrainer(
 # 第六步： 训练开始
 
 start_time = datetime.datetime.now()
+print("\n\n\n")
 print(f"{current_time()} - 开始训练...")
 
 # 训练前保存指标
@@ -181,6 +182,7 @@ trainer_stats = trainer.train()
 end_time = datetime.datetime.now()
 duration = end_time - start_time
 print(f"{current_time()} - 训练完成。")
+print("\n")
 print(f"训练用时: {duration}")
 
 
