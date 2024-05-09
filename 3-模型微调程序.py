@@ -111,7 +111,7 @@ def formatting_prompts_func(examples):
 
 # 加载和预处理数据集
 
-file_path = "1-3-训练数据/alpaca_gpt4_data_zh.json"
+file_path = "1-3-train-data/alpaca_gpt4_data_zh.json"
 dataset = load_dataset("json", data_files={"train": file_path}, split="train")
 dataset = dataset.map(formatting_prompts_func, batched=True)
 
@@ -185,8 +185,8 @@ print(f"训练用时: {duration}")
 
 
 # 保存模型到指定目录
-model.save_pretrained_gguf("dir", tokenizer, quantization_method="q4_k_m")
-model.save_pretrained_gguf("dir", tokenizer, quantization_method="q8_0")
-model.save_pretrained_gguf("dir", tokenizer, quantization_method="f16")
+model.save_pretrained_gguf("2-2-trained-model", tokenizer, quantization_method="q4_k_m")
+model.save_pretrained_gguf("2-2-trained-model", tokenizer, quantization_method="q8_0")
+model.save_pretrained_gguf("2-2-trained-model", tokenizer, quantization_method="f16")
 
 print(f"{current_time()} - 保存训练好的模型完成。")
