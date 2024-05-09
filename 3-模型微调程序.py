@@ -154,25 +154,25 @@ pre_train_metrics = save_metrics(model)
 trainer_stats = trainer.train()
 
 
-# 第七步： 训练后保存指标
+# # 第七步： 训练后保存指标
 
-post_train_metrics = save_metrics(model)
+# post_train_metrics = save_metrics(model)
 
-# 比较训练前后的变化
-changes = compare_metrics(pre_train_metrics, post_train_metrics)
+# # 比较训练前后的变化
+# changes = compare_metrics(pre_train_metrics, post_train_metrics)
 
-# 打印变化情况
-print("Changes in parameters after training:")
-for name, change in changes.items():
-    print(f"{name}: {change}")
+# # 打印变化情况
+# print("Changes in parameters after training:")
+# for name, change in changes.items():
+#     print(f"{name}: {change}")
 
-# 使用不同的量化方法保存模型
-quantization_methods = ["q4_k_m", "q8_0", "f16"]
-for method in quantization_methods:
-    # 假设 save_pretrained_gguf 是一个扩展方法用于保存和量化模型
-    model.save_pretrained_gguf("dir", tokenizer, quantization_method=method)
+# # 使用不同的量化方法保存模型
+# quantization_methods = ["q4_k_m", "q8_0", "f16"]
+# for method in quantization_methods:
+#     # 假设 save_pretrained_gguf 是一个扩展方法用于保存和量化模型
+#     model.save_pretrained_gguf("dir", tokenizer, quantization_method=method)
 
-    print(f"{current_time()} - 保存训练好的模型完成。")
+#     print(f"{current_time()} - 保存训练好的模型完成。")
 
 
 
