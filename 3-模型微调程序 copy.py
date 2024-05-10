@@ -4,7 +4,6 @@ import torch
 from trl import SFTTrainer
 from transformers import TrainingArguments
 from datasets import load_dataset
-import argparse
 
 #####################定义常量----开始################################
 
@@ -44,17 +43,6 @@ def save_metrics(model):
     # 这里可以是权重的复制，也可以是其他性能指标
     return {name: param.clone() for name, param in model.named_parameters()}
 
-def formatting_prompts_func(examples):
-    instructions = examples["instruction"]
-    inputs = examples["input"]
-    outputs = examples["output"]
-    texts = []
-    for instruction, input, output in zip(instructions, inputs, outputs):
-        text = alpaca_prompt.format(
-            instruction, input, output) + tokenizer.eos_token
-        texts.append(text)
-    return {"text": texts}
-
 # 比较模型训练前后的权重或性能指标
 def compare_metrics(pre_metrics, post_metrics):
     changes = {}
@@ -62,20 +50,12 @@ def compare_metrics(pre_metrics, post_metrics):
         post_param = post_metrics[name]
         changes[name] = torch.norm(post_param - pre_param)  # 计算差值的范数
     return changes
+
+
 #####################定义函数----结束################################
 
-# 解析命令行参数
-parser = argparse.ArgumentParser(description="模型微调程序")
-parser.add_argument("max_steps", type=int, help="训练的最大轮数")
-parser.add_argument("model_name", type=str, help="要加载的模型名称")
-args = parser.parse_args()
-args.max_steps
-
-print("模型训练开始")
-print(f"{current_time()} - 模型名称：{args.model_name}")
-print(f"{current_time()} - 训练轮数：{args.max_steps}")
-
 # 第一步检查系统环境
+
 
 print(f"{current_time()} - 环境检查如下：")
 # 打印 PyTorch 的版本
@@ -98,7 +78,7 @@ if torch.cuda.is_available():
 # 加载模型和分词器
 print(f"{current_time()} - 正在加载模型和分词器...")
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name=args.model_name,
+    model_name="unsloth/llama-3-8b-bnb-4bit",
     max_seq_length=max_seq_length,
     dtype=dtype,
     load_in_4bit=load_in_4bit,
@@ -158,7 +138,7 @@ trainer = SFTTrainer(
         per_device_train_batch_size=2,    # 每个设备的训练批次大小
         gradient_accumulation_steps=4,    # 梯度累积步数，用于在内存限制下增大有效批次大小
         warmup_steps=5,                   # 预热步数，用于调整学习率
-        max_steps=args.max_steps,                     # 训练的最大轮数
+        max_steps=60,                     # 训练的最大轮数
         learning_rate=2e-4,               # 初始学习率
         fp16=not torch.cuda.is_bf16_supported(),  # 如果设备不支持bf16，则使用fp16精度训练
         bf16=torch.cuda.is_bf16_supported(),      # 如果设备支持bf16，则使用bf16精度训练
